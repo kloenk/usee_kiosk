@@ -70,7 +70,7 @@ defmodule UseeKiosk.MixProject do
     [
       kiosk: [
         applications: [usee_kiosk: :permanent],
-        config_providers: [{UseeKiosk.Release, :config, []}]
+        config_providers: [{UseeKiosk.Release, []}]
       ]
     ]
   end
