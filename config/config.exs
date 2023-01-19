@@ -7,6 +7,10 @@
 # General application configuration
 import Config
 
+config :usee_kiosk,
+  env: config_env(),
+  images_path: "./images"
+
 # Configures the endpoint
 config :usee_kiosk, UseeKioskWeb.Endpoint,
   url: [host: "localhost"],

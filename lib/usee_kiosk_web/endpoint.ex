@@ -16,10 +16,13 @@ defmodule UseeKioskWeb.Endpoint do
   #
   # You should set gzip to true if you are running phx.digest
   # when deploying your static files in production.
+  plug UseeKioskWeb.Plugs.ImageStatic,
+    at: "/images"
+
   plug Plug.Static,
     at: "/",
     from: :usee_kiosk,
-    gzip: false,
+    gzip: Application.fetch_env(:usee_kiosk, :env) == :prod,
     only: ~w(assets fonts images favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
