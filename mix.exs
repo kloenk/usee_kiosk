@@ -11,7 +11,7 @@ defmodule UseeKiosk.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-      releases: releases(),
+      releases: releases()
     ]
   end
 
@@ -61,6 +61,7 @@ defmodule UseeKiosk.MixProject do
   defp aliases do
     [
       setup: ["deps.get"],
+      fmt: ["format"],
       "assets.deploy": ["esbuild default --minify", "phx.digest"]
     ]
   end
@@ -68,8 +69,8 @@ defmodule UseeKiosk.MixProject do
   defp releases do
     [
       kiosk: [
-        applications: [:usee_kiosk],
-        config_providers: [{UseeKiosk.Release, :config, []}],
+        applications: [usee_kiosk: :permanent],
+        config_providers: [{UseeKiosk.Release, :config, []}]
       ]
     ]
   end
