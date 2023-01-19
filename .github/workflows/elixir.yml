@@ -1,0 +1,80 @@
+name: Elixir CI
+
+on:
+  push:
+    branches: [ "main", "staging", "trying" ]
+    tags: ['v*']
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+env:
+  MIX_ENV: test
+
+jobs:
+  build:
+
+    name: "Build and test (OTP: ${{matrix.otp}}, elixir: ${{matrix.elixir}})"
+    strategy:
+      matrix:
+        otp: ['24.0', '24.3', '25.1']
+        elixir: ['1.14.2', '1.14.0', '1.13.0']
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Elixir
+      uses: erlef/setup-beam@v1
+      with:
+        elixir-version: ${{matrix.elixir}}
+        otp-version: ${{matrix.otp}}
+    - name: Restore dependencies cache
+      uses: actions/cache@v3
+      with:
+        path: deps
+        key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+        restore-keys: ${{ runner.os }}-mix-
+    - name: Install dependencies
+      run: mix deps.get
+    - name: Run tests
+      run: mix test
+    - name: Check Format
+      run: mix fmt --check-formatted
+  release:
+    name: "Build release: ${{ matrix.name }} (${{ matrix.env }})"
+    strategy:
+      matrix:
+        os: [ "ubuntu-latest", "macos-latest" ]
+    runs-on: ${{ matrix.os }}
+    env:
+      MIX_ENV: prod
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: 1.13.0
+          otp-version: 25.1
+      - name: Restore dependencies cache
+        uses: actions/cache@v3
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
+      - name: Install dependencies
+        run: mix deps.get --only $MIX_ENV
+      - name: Compile and digest
+        run: |
+          mix compile
+          mix phx.digest
+      - name: Create release
+        run: mix release
+      - name: Package release
+        run: tar czf "release.tar.gz" --directory "_build/prod/rel/" .
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: "release.tar.gz"
+          path: "release.tar.gz"
