@@ -43,10 +43,10 @@ jobs:
     - name: Check Format
       run: mix fmt --check-formatted
   release:
-    name: "Build release: ${{ matrix.name }} (${{ matrix.env }})"
+    name: "Build release: ${{ matrix.os }})"
     strategy:
       matrix:
-        os: [ "ubuntu-latest", "macos-latest" ]
+        os: [ "ubuntu-latest" ]
     runs-on: ${{ matrix.os }}
     env:
       MIX_ENV: prod
@@ -64,7 +64,7 @@ jobs:
           key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-
       - name: Install dependencies
-        run: mix deps.get --only $MIX_ENV
+        run: mix deps.get --only "$MIX_ENV"
       - name: Compile and digest
         run: |
           mix compile

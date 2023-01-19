@@ -32,3 +32,16 @@ usee_kiosk-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Credo
+credo.sarif
+
+# Config
+/config/*.secret.exs
+
+# Nix
+result
+result-*
+.devenv/
+.devenv.*
+.pre-commit-config.yaml
+.direnv/
