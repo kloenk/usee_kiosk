@@ -2,8 +2,9 @@ defmodule UseeKioskWeb.RandomImageController do
   use UseeKioskWeb, :controller
 
   def random_image() do
-    {:ok, images} = Application.get_env(:usee_kiosk, :images_path)
-    |> File.ls
+    {:ok, images} =
+      Application.get_env(:usee_kiosk, :images_path)
+      |> File.ls()
 
     Enum.random(images)
   end
