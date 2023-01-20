@@ -9,7 +9,8 @@ import Config
 
 config :usee_kiosk,
   env: config_env(),
-  images_path: "./images"
+  images_path: "./images",
+  url: "https://google.com"
 
 # Configures the endpoint
 config :usee_kiosk, UseeKioskWeb.Endpoint,
