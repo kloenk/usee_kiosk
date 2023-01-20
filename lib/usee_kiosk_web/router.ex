@@ -18,6 +18,7 @@ defmodule UseeKioskWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/random", RandomImageController, :index
   end
 
   # Other scopes may use custom stacks.

@@ -69,7 +69,7 @@ defmodule UseeKiosk.MixProject do
   defp releases do
     [
       kiosk: [
-        applications: [usee_kiosk: :permanent],
+        applications: [usee_kiosk: :permanent, inets: :load],
         config_providers: [{UseeKiosk.Release, []}]
       ]
     ]
